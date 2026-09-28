@@ -1,0 +1,353 @@
+@import "tailwindcss";
+
+@source "../index.html";
+@source "../assets/js";
+
+/* ------------------------------------------------------------------
+   Design tokens — drawn from the Spin logo (copper flame on cocoa)
+   ------------------------------------------------------------------ */
+@theme {
+  --color-powder: #f8efec;
+  --color-powder-deep: #f0e0da;
+  --color-ink: #24140f;
+  --color-ink-soft: #5b463d;
+  --color-copper: #b5652b;
+  --color-copper-deep: #8a4520;
+  --color-copper-light: #e3a970;
+  --color-plum: #5c1f4d;
+  --color-temple: #1e5a43;
+
+  --font-display: "Gloock", "Times New Roman", serif;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+
+  --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-spin-slow: spin 28s linear infinite;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-powder font-sans text-ink antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-copper);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: var(--color-copper-light);
+    color: var(--color-ink);
+  }
+}
+
+@layer components {
+  /* Buttons ------------------------------------------------------- */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-[0.95rem] font-medium whitespace-nowrap;
+    transition:
+      background-color 0.3s var(--ease-silk),
+      color 0.3s var(--ease-silk),
+      transform 0.3s var(--ease-silk),
+      box-shadow 0.3s var(--ease-silk);
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn-copper {
+    @apply bg-copper text-white;
+    box-shadow: 0 10px 24px -12px rgb(138 69 32 / 0.8);
+  }
+  .btn-copper:hover {
+    @apply bg-copper-deep;
+  }
+  .btn-ghost {
+    @apply border border-ink/20 text-ink;
+  }
+  .btn-ghost:hover {
+    @apply border-ink bg-ink text-powder;
+  }
+  .btn-light {
+    @apply bg-powder text-ink;
+  }
+  .btn-light:hover {
+    @apply bg-copper-light;
+  }
+
+  /* Section headings --------------------------------------------- */
+  .section-title {
+    @apply font-display text-[2.25rem] leading-[1.08] tracking-[-0.01em] text-balance sm:text-5xl;
+  }
+  .section-lead {
+    @apply mt-4 max-w-[58ch] text-lg text-ink-soft text-pretty;
+  }
+
+  /* Hero arch: a salon mirror silhouette -------------------------- */
+  .arch {
+    border-radius: 999px 999px 28px 28px;
+    overflow: hidden;
+  }
+
+  /* Service tabs -------------------------------------------------- */
+  .tab {
+    @apply relative shrink-0 rounded-full px-4 py-2 text-[0.95rem] whitespace-nowrap text-ink-soft;
+    transition:
+      color 0.3s var(--ease-silk),
+      background-color 0.3s var(--ease-silk);
+  }
+  .tab:hover {
+    @apply text-ink;
+  }
+  .tab[aria-selected="true"] {
+    @apply bg-ink text-powder;
+  }
+  .tab-panel[hidden] {
+    display: none;
+  }
+  .tab-panel {
+    animation: panel-in 0.5s var(--ease-silk);
+  }
+
+  /* Service rows -------------------------------------------------- */
+  .svc {
+    @apply flex flex-col items-start justify-between gap-3 py-5 min-[420px]:flex-row min-[420px]:gap-6;
+  }
+  .svc-title {
+    @apply font-display text-2xl;
+  }
+  .svc-text {
+    @apply mt-1 max-w-[46ch] text-ink-soft;
+  }
+  .svc-btn {
+    @apply shrink-0 px-4 py-2 text-sm;
+  }
+
+  /* Gallery tiles ------------------------------------------------- */
+  .gal {
+    @apply w-[72vw] shrink-0 snap-start sm:w-80;
+  }
+  .gal img {
+    @apply aspect-[3/4] w-full rounded-3xl object-cover object-top;
+  }
+
+  /* Course cards: swipe slides on phones, grid cells from sm ----- */
+  .course-card {
+    @apply flex w-[84%] shrink-0 snap-start flex-col rounded-3xl p-7 sm:w-auto;
+  }
+
+  /* Carousel controls (dots + pause) ----------------------------- */
+  .carousel-controls {
+    @apply flex items-center gap-3;
+  }
+  .carousel-controls[hidden] {
+    display: none;
+  }
+  .carousel-toggle {
+    @apply grid size-9 shrink-0 place-items-center rounded-full border border-ink/15 text-ink transition-colors hover:bg-ink hover:text-powder;
+  }
+  .carousel-dot {
+    @apply grid size-6 place-items-center;
+  }
+  .carousel-dot::before {
+    content: "";
+    @apply block h-2 w-2 rounded-full bg-ink/20;
+    transition:
+      width 0.4s var(--ease-silk),
+      background-color 0.4s var(--ease-silk);
+  }
+  .carousel-dot[aria-current="true"]::before {
+    @apply w-6 bg-copper;
+  }
+
+  /* Form ---------------------------------------------------------- */
+  .select-field {
+    @apply appearance-none bg-no-repeat pr-10;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235b463d' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
+    background-size: 1.1rem;
+    background-position: right 1rem center;
+  }
+  .field-label {
+    @apply mb-1.5 block text-sm font-medium text-ink;
+  }
+  .field {
+    @apply w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-base text-ink placeholder:text-ink-soft/60;
+    transition:
+      border-color 0.25s var(--ease-silk),
+      box-shadow 0.25s var(--ease-silk);
+  }
+  .field:focus {
+    @apply border-copper outline-none;
+    box-shadow: 0 0 0 4px rgb(181 101 43 / 0.15);
+  }
+  .field[aria-invalid="true"] {
+    @apply border-plum;
+  }
+  .field-error {
+    @apply mt-1.5 hidden text-sm text-plum;
+  }
+  .field-error.is-visible {
+    @apply block;
+  }
+
+  .chip {
+    @apply flex cursor-pointer items-center justify-center rounded-xl border border-ink/15 bg-white px-2 py-3 text-center text-sm sm:px-4 sm:text-[0.95rem];
+    transition:
+      border-color 0.25s var(--ease-silk),
+      background-color 0.25s var(--ease-silk),
+      color 0.25s var(--ease-silk);
+  }
+  .chip:has(input:checked) {
+    @apply border-copper bg-copper/10 text-copper-deep;
+  }
+  .chip:has(input:focus-visible) {
+    outline: 2px solid var(--color-copper);
+    outline-offset: 2px;
+  }
+
+  /* Mode switch (Book / Walk-in) with sliding thumb --------------- */
+  .mode-switch {
+    @apply relative grid grid-cols-2 rounded-full bg-powder-deep p-1;
+  }
+  .mode-switch::before {
+    content: "";
+    @apply absolute inset-y-1 left-1 rounded-full bg-ink;
+    width: calc(50% - 0.25rem);
+    transition: transform 0.45s var(--ease-silk);
+  }
+  .mode-switch[data-mode="walkin"]::before {
+    transform: translateX(100%);
+  }
+  .mode-switch button {
+    @apply relative z-10 rounded-full px-2 py-2.5 text-[0.95rem] font-medium whitespace-nowrap text-ink-soft;
+    transition: color 0.3s var(--ease-silk);
+  }
+  .mode-switch button[aria-pressed="true"] {
+    @apply text-powder;
+  }
+
+  /* FAQ accordion ------------------------------------------------- */
+  .faq summary {
+    @apply flex cursor-pointer list-none items-center justify-between gap-6 py-5 font-display text-xl;
+  }
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq summary .plus {
+    @apply relative size-5 shrink-0;
+  }
+  .faq summary .plus::before,
+  .faq summary .plus::after {
+    content: "";
+    @apply absolute top-1/2 left-0 h-px w-full bg-copper;
+    transition: transform 0.4s var(--ease-silk);
+  }
+  .faq summary .plus::after {
+    transform: rotate(90deg);
+  }
+  .faq[open] summary .plus::after {
+    transform: rotate(0deg);
+  }
+  .faq::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 0.45s var(--ease-silk),
+      content-visibility 0.45s allow-discrete;
+  }
+  .faq[open]::details-content {
+    block-size: auto;
+  }
+
+  /* Header -------------------------------------------------------- */
+  .site-header {
+    transition:
+      background-color 0.4s var(--ease-silk),
+      box-shadow 0.4s var(--ease-silk);
+  }
+  .site-header.is-scrolled {
+    background-color: rgb(248 239 236 / 0.86);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 1px 0 rgb(36 20 15 / 0.08);
+  }
+
+  .mobile-nav {
+    transition:
+      opacity 0.35s var(--ease-silk),
+      transform 0.35s var(--ease-silk),
+      visibility 0.35s;
+  }
+  .mobile-nav:not(.is-open) {
+    @apply invisible -translate-y-3 opacity-0;
+  }
+
+  /* Hero entrance — the page's one orchestrated moment ------------ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: rise 0.9s var(--ease-silk) forwards;
+    animation-delay: calc(var(--i, 0) * 110ms + 150ms);
+  }
+  .arch-reveal {
+    clip-path: inset(100% 0 0 0 round 999px 999px 28px 28px);
+    animation: arch-open 1.3s var(--ease-silk) 0.2s forwards;
+  }
+}
+
+@layer utilities {
+  html {
+    interpolate-size: allow-keywords;
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes arch-open {
+  to {
+    clip-path: inset(0 0 0 0 round 999px 999px 28px 28px);
+  }
+}
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .animate-spin-slow {
+    animation: none !important;
+  }
+  .scroll-smooth {
+    scroll-behavior: auto;
+  }
+}

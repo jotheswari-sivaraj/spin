@@ -1,0 +1,14 @@
+{
+  "name": "spin-salon",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing page for Spin Academy & Makeup Studio, Kumaran Nagar, Trichy",
+  "scripts": {
+    "dev": "tailwindcss -i ./src/input.css -o ./assets/css/styles.css --watch",
+    "build": "tailwindcss -i ./src/input.css -o ./assets/css/styles.css --minify"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.0",
+    "tailwindcss": "^4.1.0"
+  }
+}
